@@ -3,7 +3,7 @@ clear all;
 %Amplitude
 A = 2;
 %Signal frequency
-F0 = 4e3;
+F0 = 10e3;
 %Sampling Frequency
 Fs = 4*F0;
 %time
@@ -61,6 +61,7 @@ end
 omega = -pi:0.01:pi;    
 h = freqz(W_coeff_new,1,omega);
 freq = omega*(Fs/(2*pi));
+signal = filtfilt(W_coeff_new,1, x);
 
 %Plots:
 
@@ -73,11 +74,29 @@ ylabel("Error");
 grid on;
 
 
-%Filtered signal
+%Adapted tranfer function
 figure(2)
 plot(freq,fftshift(abs(h).^2));
 title(sprintf("Transfer function response @ F =%d kHz ",F0/1000));
 xlabel("Frequency");
 ylabel("|H(w)|^2");
+grid on;
+grid minor;
+
+%Signal
+figure(3)
+%Un-filtered signal
+plot(t, x);
+axis([0,0.002,-3,3]);
+grid on;
+grid minor;
+hold on;
+%Filtered signal
+plot(t, signal);
+axis([0,0.002,-3,3]);
+title("Signal");
+xlabel("time");
+ylabel("signal");
+legend("Un-filtered signal","Filtered Signal");
 grid on;
 grid minor;
